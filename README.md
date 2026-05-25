@@ -142,4 +142,3 @@ Open **http://localhost:5173**
 1. Sign up at [cloudinary.com](https://cloudinary.com)
 2. Copy your Cloud Name, API Key, and API Secret
 3. Paste into backend environment variables
-4. 
