@@ -104,11 +104,15 @@ const VideoPlayer = ({ emitPlay, emitPause, emitSeek, emitSync }) => {
   if (!videoUrl) return null;
 
   return (
-    <div className="relative w-full aspect-video bg-black group" onMouseMove={showCtrl} onMouseLeave={() => setShowControls(false)}>
+    <div
+      className="relative flex h-full min-h-0 w-full flex-1 items-center justify-center overflow-hidden bg-black group"
+      onMouseMove={showCtrl}
+      onMouseLeave={() => setShowControls(false)}
+    >
       <video
         ref={videoRef}
         src={videoUrl}
-        className="w-full h-full object-contain"
+        className="h-full max-h-full w-full max-w-full object-contain"
         onPlay={handlePlay}
         onPause={handlePause}
         onSeeked={handleSeeked}
