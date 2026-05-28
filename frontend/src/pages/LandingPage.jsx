@@ -234,7 +234,7 @@ const LandingPage = () => {
           {/* Nav links */}
           <div className="hidden sm:flex items-center gap-10 text-sm font-medium">
             <a href="#features" className="text-white/50 hover:text-white transition-colors duration-200">How it works</a>
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="text-white/50 hover:text-white transition-colors duration-200">Source</a>
+            <a href="https://github.com/sahibaGalaxy02/Watch-Together" target="_blank" rel="noreferrer" className="text-white/50 hover:text-white transition-colors duration-200">Source</a>
           </div>
         </div>
       </nav>
