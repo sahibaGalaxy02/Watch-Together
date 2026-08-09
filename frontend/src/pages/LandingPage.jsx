@@ -137,7 +137,7 @@ const StartModal = ({ isOpen, onClose }) => {
       <form onSubmit={handleCreate} className="space-y-4">
         <div>
           <label className="block text-xs font-semibold text-white/50 uppercase tracking-widest mb-2">Your nickname</label>
-          <input className="input-field w-full px-4 py-2.5 rounded-lg bg-white/8 border border-white/15 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none transition-colors" placeholder="e.g. Naved" value={nickname}
+          <input className="input-field w-full px-4 py-2.5 rounded-lg bg-white/8 border border-white/15 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none transition-colors" placeholder="e.g. Sahiba" value={nickname}
             onChange={(e) => setNickname(e.target.value)} maxLength={24} autoFocus />
         </div>
         <p className="text-white/40 text-xs leading-relaxed">
@@ -178,7 +178,7 @@ const JoinModal = ({ isOpen, onClose }) => {
       <form onSubmit={handleJoin} className="space-y-4">
         <div>
           <label className="block text-xs font-semibold text-white/50 uppercase tracking-widest mb-2">Your nickname</label>
-          <input className="input-field w-full px-4 py-2.5 rounded-lg bg-white/8 border border-white/15 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none transition-colors" placeholder="e.g. Naved" value={nickname}
+          <input className="input-field w-full px-4 py-2.5 rounded-lg bg-white/8 border border-white/15 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none transition-colors" placeholder="e.g. Sahiba" value={nickname}
             onChange={(e) => setNickname(e.target.value)} maxLength={24} autoFocus />
         </div>
         <div>
