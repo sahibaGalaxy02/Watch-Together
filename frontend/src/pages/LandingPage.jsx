@@ -6,7 +6,7 @@ import useRoomStore from '../store/roomStore.js';
 import Spinner from '../components/common/Spinner.jsx';
 import Modal from '../components/common/Modal.jsx';
 
-/* ─── Avatar component ─────────────────────────────────── */
+/* ─── Avatar component ──────────────────────────────── */
 const Avatar = ({ initials, gradient, size = 'sm' }) => {
   const sz = size === 'sm' ? 'w-8 h-8 text-[11px]' : 'w-10 h-10 text-xs';
   return (
