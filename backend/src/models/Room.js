@@ -9,29 +9,13 @@ const messageSchema = new mongoose.Schema({
 
 const roomSchema = new mongoose.Schema(
   {
-    roomId: {
-      type: String,
-      required: true,
-      unique: true,
-      index: true,
-    },
-    hostId: {
-      type: String,
-      required: true,
-    },
-    videoUrl: {
-      type: String,
-      default: null,
-    },
-    videoPublicId: {
-      type: String,
-      default: null,
-    },
-    videoTitle: {
-      type: String,
-      default: null,
-    },
-    // Track playback state in DB for late joiners
+    roomId: { type: String, required: true, unique: true, index: true },
+    hostId: { type: String, required: true },
+    videoUrl: { type: String, default: null },
+    videoPublicId: { type: String, default: null },
+    videoTitle: { type: String, default: null },
+    // 'file' = Cloudinary upload | 'youtube' = YouTube embed
+    videoType: { type: String, enum: ['file', 'youtube'], default: 'file' },
     playbackState: {
       isPlaying: { type: Boolean, default: false },
       currentTime: { type: Number, default: 0 },

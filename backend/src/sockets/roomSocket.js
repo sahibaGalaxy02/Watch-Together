@@ -1,12 +1,10 @@
 import Room from '../models/Room.js';
 
-/**
- * In-memory map of active rooms:
- * roomId -> { hostSocketId, users: Map<socketId, { nickname, socketId }> }
- */
+/** In-memory: roomId -> { hostSocketId, users: Map<socketId, {nickname}> } */
 const activeRooms = new Map();
 
 const registerRoomSocket = (io, socket) => {
+
   // JOIN ROOM
   socket.on('join-room', async ({ roomId, nickname }) => {
     try {
@@ -20,7 +18,6 @@ const registerRoomSocket = (io, socket) => {
       if (!activeRooms.has(roomId)) {
         activeRooms.set(roomId, { hostSocketId: socket.id, users: new Map() });
       }
-
       const memRoom = activeRooms.get(roomId);
       memRoom.users.set(socket.id, { nickname, socketId: socket.id });
 
@@ -30,30 +27,37 @@ const registerRoomSocket = (io, socket) => {
       }
 
       const usersArray = Array.from(memRoom.users.values());
-
       socket.emit('room-state', {
         roomId,
         hostSocketId: memRoom.hostSocketId,
         videoUrl: room.videoUrl,
         videoTitle: room.videoTitle,
+        videoType: room.videoType,
         playbackState: room.playbackState,
         users: usersArray,
         messages: room.messages.slice(-50),
       });
 
       socket.to(roomId).emit('user-joined', { socketId: socket.id, nickname, users: usersArray });
-      console.log("[JOIN]", nickname, socket.id, "->", roomId);
+      console.log(`[JOIN] ${nickname} -> ${roomId}`);
     } catch (err) {
-      console.error('[join-room error]', err.message);
+      console.error('[join-room]', err.message);
       socket.emit('error', { message: 'Failed to join room' });
     }
   });
 
-  // VIDEO UPLOADED
+  // VIDEO UPLOADED (Cloudinary file)
   socket.on('video-uploaded', ({ roomId, videoUrl, videoTitle }) => {
     const memRoom = activeRooms.get(roomId);
     if (!memRoom || memRoom.hostSocketId !== socket.id) return;
-    io.to(roomId).emit('video-ready', { videoUrl, videoTitle });
+    io.to(roomId).emit('video-ready', { videoUrl, videoTitle, videoType: 'file' });
+  });
+
+  // YOUTUBE URL SET (host only)
+  socket.on('youtube-set', ({ roomId, videoUrl, videoTitle }) => {
+    const memRoom = activeRooms.get(roomId);
+    if (!memRoom || memRoom.hostSocketId !== socket.id) return;
+    io.to(roomId).emit('video-ready', { videoUrl, videoTitle, videoType: 'youtube' });
   });
 
   // PLAY
@@ -80,7 +84,7 @@ const registerRoomSocket = (io, socket) => {
     socket.to(roomId).emit('seek-video', { currentTime });
   });
 
-  // SYNC (host broadcasts periodically for drift correction)
+  // SYNC (host → all viewers, periodic drift correction)
   socket.on('sync-time', ({ roomId, currentTime, isPlaying }) => {
     const memRoom = activeRooms.get(roomId);
     if (!memRoom || memRoom.hostSocketId !== socket.id) return;
@@ -108,14 +112,12 @@ const registerRoomSocket = (io, socket) => {
       await Room.updateOne({ roomId }, { isActive: false });
       return;
     }
-
     if (memRoom.hostSocketId === socket.id) {
       const newHostId = memRoom.users.keys().next().value;
       memRoom.hostSocketId = newHostId;
       await Room.updateOne({ roomId }, { hostId: newHostId });
       io.to(roomId).emit('host-changed', { newHostSocketId: newHostId, nickname: memRoom.users.get(newHostId)?.nickname });
     }
-
     socket.to(roomId).emit('user-left', { socketId: socket.id, nickname: socket.data.nickname, users: usersArray });
   };
 
