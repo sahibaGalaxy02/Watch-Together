@@ -27,7 +27,7 @@ export const uploadVideo = async (roomId, file, onProgress) => {
   return data;
 };
 
-/** Set a YouTube URL for the room (host only) */
+/** Set a YouTube URL for the room (hosst only) */
 export const setYouTubeUrl = async (roomId, youtubeUrl) => {
   const { data } = await api.post(`/api/rooms/${roomId}/set-youtube`, { youtubeUrl });
   return data;
